@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS goods (
     project_id INTEGER NOT NULL
         REFERENCES projects(id) ON DELETE CASCADE ON UPDATE CASCADE,
     name TEXT NOT NULL,
-    description TEXT,
+    description TEXT DEFAULT '',
     priority INTEGER NOT NULL DEFAULT 0,
     removed BOOLEAN NOT NULL DEFAULT FALSE,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
