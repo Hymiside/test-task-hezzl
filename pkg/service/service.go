@@ -8,6 +8,7 @@ import (
 
 type shop interface {
 	Create(data models.Good) (models.Good, error)
+	Update(data models.Good) (models.Good, error)
 }
 
 type Service struct {

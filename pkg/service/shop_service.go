@@ -22,3 +22,11 @@ func (s *shopService) Create(data models.Good) (models.Good, error) {
 	}
 	return res, nil
 }
+
+func (s *shopService) Update(data models.Good) (models.Good, error) {
+	res, err := s.repoP.Shop.Update(data)
+	if err != nil {
+		return models.Good{}, err
+	}
+	return res, nil
+}
