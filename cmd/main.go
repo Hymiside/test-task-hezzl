@@ -21,37 +21,37 @@ func main() {
 	defer cancel()
 
 	if err := godotenv.Load(); err != nil {
-		log.Panic("error .env file not found")
+		log.Panicf("error .env file not found: %v", err)
 	}
 
-	db_p, err := postgres.NewPostgresDB(
+	dbP, err := postgres.NewPostgresDB(
 		ctx,
 		models.ConfigPostgresRepository{
-			Host:     os.Getenv("HOST-DB"),
-			Port:     os.Getenv("PORT-DB"),
-			User:     os.Getenv("USER-DB"),
-			Password: os.Getenv("PASSWORD-DB"),
-			Name:     os.Getenv("NAME-DB"),
+			Host:     os.Getenv("HOST_DB"),
+			Port:     os.Getenv("PORT_DB"),
+			User:     os.Getenv("USER_DB"),
+			Password: os.Getenv("PASSWORD_DB"),
+			Name:     os.Getenv("NAME_DB"),
 		})
 	if err != nil {
 		log.Panicf("error to init postgres repository: %v", err)
 	}
 
-	db_c, err := clickhouse.NewClickhouseDB(
+	dbC, err := clickhouse.NewClickhouseDB(
 		ctx, 
 		models.ConfigClickhouseRepository{
-			Host: os.Getenv("HOST-CLICKHOUSE"),
-			Port: os.Getenv("PORT-CLICKHOUSE"),
-			Name: os.Getenv("NAME-CLICKHOUSE"),
+			Host: os.Getenv("HOST_CLICKHOUSE"),
+			Port: os.Getenv("PORT_CLICKHOUSE"),
+			Name: os.Getenv("NAME_CLICKHOUSE"),
 		})
 	if err != nil {
 		log.Panicf("error to init clickhouse repository: %v", err)
 	}
 
-	postg := postgres.NewPostgresRepository(db_p)
-	che := clickhouse.NewClickhouseRepository(db_c)
+	repoP := postgres.NewPostgresRepository(dbP)
+	repoC := clickhouse.NewClickhouseRepository(dbC)
 
-	services := service.NewService(postg, che)
+	services := service.NewService(repoP, repoC)
 	handlers := handler.NewHandler(services)
 
 	go func() {

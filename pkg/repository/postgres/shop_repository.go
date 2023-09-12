@@ -6,9 +6,9 @@ import (
 
 
 type shopPostgres struct {
-	db *sql.DB
+	dbP *sql.DB
 }
 
 func newShopPostgres(db *sql.DB) *shopPostgres {
-	return &shopPostgres{db: db}
+	return &shopPostgres{dbP: db}
 }

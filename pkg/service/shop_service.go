@@ -6,10 +6,10 @@ import (
 )
 
 type shopService struct {
-	postg *postgres.PostgresRepository
-	che   *clickhouse.ClickhouseRepository
+	repoP *postgres.PostgresRepository
+	repoC   *clickhouse.ClickhouseRepository
 }
 
-func newShopService(postg *postgres.PostgresRepository, che *clickhouse.ClickhouseRepository) *shopService {
-	return &shopService{postg: postg, che: che}
+func newShopService(repoP *postgres.PostgresRepository, repoC *clickhouse.ClickhouseRepository) *shopService {
+	return &shopService{repoP: repoP, repoC: repoC}
 }

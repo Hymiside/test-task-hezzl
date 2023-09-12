@@ -12,6 +12,6 @@ type Service struct {
 	sh shop
 }
 
-func NewService(postg *postgres.PostgresRepository, che *clickhouse.ClickhouseRepository) *Service {
-	return &Service{sh: newShopService(postg, che)}
+func NewService(repoP *postgres.PostgresRepository, repoC *clickhouse.ClickhouseRepository) *Service {
+	return &Service{sh: newShopService(repoP, repoC)}
 }

@@ -6,9 +6,9 @@ import (
 
 
 type logsClickhouse struct {
-	db *sql.DB
+	dbC *sql.DB
 }
 
 func newLogsClickhouse(db *sql.DB) *logsClickhouse {
-	return &logsClickhouse{db: db}
+	return &logsClickhouse{dbC: db}
 }
