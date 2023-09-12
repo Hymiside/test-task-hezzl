@@ -26,8 +26,8 @@ type ConfigClickhouseRepository struct {
 type Good struct {
 	Id          int 	  `db:"id"`
 	ProjectId   int       `db:"project_id"`
-	Name 	    string    `json:"name" db:"name"`
-	Description string    `db:"description"`
+	Name 	    string    `json:"name" 		  db:"name"`
+	Description string    `json:"description" db:"description"`
 	Priority    int 	  `db:"priority"`
 	Removed     bool 	  `db:"removed"`
 	CreatedAt   time.Time `db:"created_at"`
