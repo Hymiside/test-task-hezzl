@@ -9,6 +9,7 @@ import (
 type shop interface{
 	Create(data models.Good) (models.Good, error)
 	Update(data models.Good) (models.Good, error)
+	Delete(data models.Good) (map[string]string, error)
 }
 
 type PostgresRepository struct {

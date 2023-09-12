@@ -30,3 +30,11 @@ func (s *shopService) Update(data models.Good) (models.Good, error) {
 	}
 	return res, nil
 }
+
+func (s *shopService) Delete(data models.Good) (map[string]string, error) {
+	res, err := s.repoP.Shop.Delete(data)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
