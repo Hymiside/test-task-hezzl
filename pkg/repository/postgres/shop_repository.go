@@ -1,7 +1,12 @@
 package postgres
 
 import (
+	"context"
 	"database/sql"
+	"fmt"
+	"time"
+
+	"github.com/Hymiside/test-task-hezzl/pkg/models"
 )
 
 
@@ -11,4 +16,40 @@ type shopPostgres struct {
 
 func newShopPostgres(db *sql.DB) *shopPostgres {
 	return &shopPostgres{dbP: db}
+}
+
+func (s *shopPostgres) Create(data models.Good) (models.Good, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	defer cancel()
+
+	tx, err := s.dbP.BeginTx(ctx, nil)
+    if err != nil {
+        return models.Good{}, fmt.Errorf("error to begin transaction: %v", err)
+    }
+	defer tx.Rollback()
+
+	var goodId int
+	if err := tx.QueryRowContext(ctx, "INSERT INTO goods (name, project_id) VALUES ($1, $2) RETURNING id", data.Name, data.ProjectId).Scan(&goodId); err != nil {
+		return models.Good{}, fmt.Errorf("error to create good: %v", err)
+	}
+
+	var res models.Good
+	if err = tx.QueryRowContext(ctx, "SELECT * FROM goods WHERE id = $1", goodId).Scan(
+		&res.Id, 
+		&res.ProjectId, 
+		&res.Name, 
+		&res.Description, 
+		&res.Priority, 
+		&res.Removed, 
+		&res.CreatedAt); err != nil {
+        if err == sql.ErrNoRows {
+            return models.Good{}, fmt.Errorf("good not found: %v", err)
+        }
+        return models.Good{}, fmt.Errorf("error to get good: %v", err)
+	}
+
+	if err = tx.Commit(); err != nil {
+        return models.Good{}, fmt.Errorf("error to commit transaction: %v", err)
+    }
+	return res, nil
 }

@@ -21,7 +21,7 @@ func main() {
 	defer cancel()
 
 	if err := godotenv.Load(); err != nil {
-		log.Panicf("error .env file not found: %v", err)
+		log.Panicf("error to load .env file: %v", err)
 	}
 
 	dbP, err := postgres.NewPostgresDB(

@@ -35,7 +35,8 @@ func NewPostgresDB(ctx context.Context, c models.ConfigPostgresRepository) (*sql
 		return nil, err
 	}
 	if err := m.Up(); err != nil {
-		return nil, fmt.Errorf("error to make migrations postgres: %w", err)
+		return dbP, nil
+		// return nil, fmt.Errorf("error to make migrations postgres: %w", err)
 	}
 
 	return dbP, nil
