@@ -64,7 +64,26 @@ func (h *Handler) update(c *gin.Context) {
 	responseSuccessful(c, res)
 }
 
-func (h *Handler) delete(c *gin.Context) {}
+func (h *Handler) delete(c *gin.Context) {
+	projectId, goodId := c.Query("projectId"), c.Query("id")
+	if projectId == "" || goodId == "" {
+		responseWithError(c, http.StatusBadRequest, ErrInvalidRequest.Error())
+		return
+	}
+
+	var data models.Good
+
+	data.ProjectId, _ = strconv.Atoi(projectId)
+	data.Id, _ = strconv.Atoi(goodId)
+
+	res, err := h.services.Shop.Delete(data)
+	if err != nil {
+		responseWithError(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	responseSuccessful(c, res)
+}
 
 func (h *Handler) list(c *gin.Context) {}
 
