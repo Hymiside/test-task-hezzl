@@ -124,3 +124,24 @@ func (s *shopPostgres) Delete(data models.Good) (map[string]string, error) {
 
 	return res, nil
 }
+
+func (s *shopPostgres) GetAll() ([]models.Good, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	defer cancel()
+
+	rows, err := s.dbP.QueryContext(ctx, "SELECT * FROM goods;")
+	if err != nil {
+		return nil, fmt.Errorf("error to get all goods: %v", err)
+	}
+	defer rows.Close()
+
+	var goods []models.Good
+	for rows.Next() {
+		var good models.Good
+		if err := rows.Scan(&good.Id, &good.ProjectId, &good.Name, &good.Description, &good.Priority, &good.Removed, &good.CreatedAt); err != nil {
+			return nil, fmt.Errorf("error to scan good: %v", err)
+		}
+		goods = append(goods, good)
+	}
+	return goods, nil
+}

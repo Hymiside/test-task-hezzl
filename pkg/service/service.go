@@ -4,6 +4,7 @@ import (
 	"github.com/Hymiside/test-task-hezzl/pkg/models"
 	"github.com/Hymiside/test-task-hezzl/pkg/repository/clickhouse"
 	"github.com/Hymiside/test-task-hezzl/pkg/repository/postgres"
+	"github.com/Hymiside/test-task-hezzl/pkg/repository/redis"
 )
 
 type shop interface {
@@ -16,6 +17,6 @@ type Service struct {
 	Shop shop
 }
 
-func NewService(repoP *postgres.PostgresRepository, repoC *clickhouse.ClickhouseRepository) *Service {
-	return &Service{Shop: newShopService(repoP, repoC)}
+func NewService(repoP *postgres.PostgresRepository, repoC *clickhouse.ClickhouseRepository, ch *redis.RedisRepository) *Service {
+	return &Service{Shop: newShopService(repoP, repoC, ch)}
 }
