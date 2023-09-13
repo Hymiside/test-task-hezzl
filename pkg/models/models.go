@@ -23,6 +23,11 @@ type ConfigClickhouseRepository struct {
 	Name string
 }
 
+type ConfigRedis struct {
+	Host string
+	Port string
+}
+
 type Good struct {
 	Id          int 	  `db:"id"`
 	ProjectId   int       `db:"project_id"`

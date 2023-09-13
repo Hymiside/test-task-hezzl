@@ -9,8 +9,9 @@ import (
 
 	"github.com/Hymiside/test-task-hezzl/pkg/handler"
 	"github.com/Hymiside/test-task-hezzl/pkg/models"
-	"github.com/Hymiside/test-task-hezzl/pkg/repository/postgres"
 	"github.com/Hymiside/test-task-hezzl/pkg/repository/clickhouse"
+	"github.com/Hymiside/test-task-hezzl/pkg/repository/postgres"
+	"github.com/Hymiside/test-task-hezzl/pkg/repository/redis"
 	"github.com/Hymiside/test-task-hezzl/pkg/server"
 	"github.com/Hymiside/test-task-hezzl/pkg/service"
 	"github.com/joho/godotenv"
@@ -48,10 +49,19 @@ func main() {
 		log.Panicf("error to init clickhouse repository: %v", err)
 	}
 
+	ch, err := redis.NewRedisDB(ctx, models.ConfigRedis{
+		Host: os.Getenv("HOST_REDIS"),
+		Port: os.Getenv("PORT_REDIS"),
+	})
+	if err != nil {
+		log.Panicf("error to init redis repository: %v", err)
+	}
+
+	repoR := redis.NewRedisRepository(ch)
 	repoP := postgres.NewPostgresRepository(dbP)
 	repoC := clickhouse.NewClickhouseRepository(dbC)
 
-	services := service.NewService(repoP, repoC)
+	services := service.NewService(repoP, repoC, repoR)
 	handlers := handler.NewHandler(services)
 
 	go func() {
