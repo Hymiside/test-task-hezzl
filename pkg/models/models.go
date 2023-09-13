@@ -37,3 +37,8 @@ type Good struct {
 	Removed     bool 	  `db:"removed"`
 	CreatedAt   time.Time `db:"created_at"`
 }
+
+type ConfigNats struct {
+	Host string
+	Port string
+}

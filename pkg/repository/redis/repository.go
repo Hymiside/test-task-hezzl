@@ -7,9 +7,7 @@ import (
 	"github.com/go-redis/cache/v9"
 )
 
-
-
-type redisCh interface{
+type redisCh interface {
 	GetAll(ctx context.Context) ([]models.Good, error)
 	SetItems(ctx context.Context, items []models.Good) error
 	DeleteItem(ctx context.Context) error

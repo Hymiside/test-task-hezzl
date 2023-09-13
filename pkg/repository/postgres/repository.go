@@ -6,11 +6,12 @@ import (
 	"github.com/Hymiside/test-task-hezzl/pkg/models"
 )
 
-type shop interface{
+type shop interface {
 	Create(data models.Good) (models.Good, error)
 	Update(data models.Good) (models.Good, error)
-	Delete(data models.Good) (map[string]string, error)
-	GetAll() ([]models.Good, error)
+	Delete(data models.Good) (models.Good, error)
+	GetAll(limit, offset int) ([]models.Good, error)
+	WriteLogs(logs [][]byte) error
 }
 
 type PostgresRepository struct {

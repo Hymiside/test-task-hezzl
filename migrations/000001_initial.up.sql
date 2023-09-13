@@ -15,4 +15,16 @@ CREATE TABLE IF NOT EXISTS goods (
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
 );
 
+CREATE TABLE IF NOT EXISTS logs (
+    id SERIAL PRIMARY KEY,
+    good_id INTEGER NOT NULL,
+    project_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    description TEXT DEFAULT '',
+    priority INTEGER NOT NULL,
+    removed BOOLEAN NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+
+);
+
 INSERT INTO projects (name) VALUES ('Hezzl');

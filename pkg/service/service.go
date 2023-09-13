@@ -1,22 +1,25 @@
 package service
 
 import (
+	"context"
+
 	"github.com/Hymiside/test-task-hezzl/pkg/models"
-	"github.com/Hymiside/test-task-hezzl/pkg/repository/clickhouse"
+	"github.com/Hymiside/test-task-hezzl/pkg/natsqueue"
 	"github.com/Hymiside/test-task-hezzl/pkg/repository/postgres"
 	"github.com/Hymiside/test-task-hezzl/pkg/repository/redis"
 )
 
-type shop interface {
-	Create(data models.Good) (models.Good, error)
-	Update(data models.Good) (models.Good, error)
-	Delete(data models.Good) (map[string]string, error)
+type service interface {
+	Create(ctx context.Context, data models.Good) (models.Good, error)
+	Update(ctx context.Context, data models.Good) (models.Good, error)
+	Delete(ctx context.Context, data models.Good) (interface{}, error)
+	GetAll(ctx context.Context, limit, offset int) (map[string]interface{}, error)
 }
 
 type Service struct {
-	Shop shop
+	Shop service
 }
 
-func NewService(repoP *postgres.PostgresRepository, repoC *clickhouse.ClickhouseRepository, ch *redis.RedisRepository) *Service {
-	return &Service{Shop: newShopService(repoP, repoC, ch)}
+func NewService(repoP *postgres.PostgresRepository, ch *redis.RedisRepository, nc *natsqueue.Queue) *Service {
+	return &Service{Shop: newShopService(repoP, ch, nc)}
 }

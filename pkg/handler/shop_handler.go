@@ -26,7 +26,7 @@ func (h *Handler) create(c *gin.Context) {
 	}
 
 	data.ProjectId, _ = strconv.Atoi(projectId)
-	res, err := h.services.Shop.Create(data)
+	res, err := h.services.Shop.Create(c, data)
 	if err != nil {
 		responseWithError(c, http.StatusInternalServerError, err.Error())
 		return
@@ -55,7 +55,7 @@ func (h *Handler) update(c *gin.Context) {
 
 	data.ProjectId, _ = strconv.Atoi(projectId)
 	data.Id, _ = strconv.Atoi(goodId)
-	res, err := h.services.Shop.Update(data)
+	res, err := h.services.Shop.Update(c, data)
 	if err != nil {
 		responseWithError(c, http.StatusInternalServerError, err.Error())
 		return
@@ -76,7 +76,7 @@ func (h *Handler) delete(c *gin.Context) {
 	data.ProjectId, _ = strconv.Atoi(projectId)
 	data.Id, _ = strconv.Atoi(goodId)
 
-	res, err := h.services.Shop.Delete(data)
+	res, err := h.services.Shop.Delete(c, data)
 	if err != nil {
 		responseWithError(c, http.StatusInternalServerError, err.Error())
 		return
@@ -85,6 +85,25 @@ func (h *Handler) delete(c *gin.Context) {
 	responseSuccessful(c, res)
 }
 
-func (h *Handler) list(c *gin.Context) {}
+func (h *Handler) list(c *gin.Context) {
+	limit, offset := c.Query("limit"), c.Query("offset")
+
+	var limitInt, offsetInt = 10, 0
+	if limit != "" {
+		limitInt, _ = strconv.Atoi(limit)
+	}		
+	if offset != "" {
+		offsetInt, _ = strconv.Atoi(offset)
+	}
+
+	res, err := h.services.Shop.GetAll(c, limitInt, offsetInt)
+	if err != nil {
+		responseWithError(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	responseSuccessful(c, res)
+
+}
 
 func (h *Handler) reprioritiize(c *gin.Context) {}

@@ -1,9 +1,10 @@
 package redis
 
 import (
-	"time"
 	"context"
 	"errors"
+	"fmt"
+	"time"
 
 	"github.com/Hymiside/test-task-hezzl/pkg/models"
 	"github.com/go-redis/cache/v9"
@@ -22,7 +23,7 @@ func newRedisCache(ch *cache.Cache) *redisCache {
 func (r *redisCache) GetAll(ctx context.Context) ([]models.Good, error) {
 	var items []models.Good
 	if err := r.ch.Get(ctx, "DataItems", &items); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error to get items from redis: %w", err)
 	}
 	if items == nil {
 		return nil, errors.New("not found items in redis")
@@ -37,14 +38,14 @@ func (r *redisCache) SetItems(ctx context.Context, items []models.Good) error {
 		Value: items,
 		TTL:   TTL,
 	}); err != nil {
-		return err
+		return fmt.Errorf("error to set items in redis: %w", err)
 	}
 	return nil
 }
 
 func (r *redisCache) DeleteItem(ctx context.Context) error {
 	if err := r.ch.Delete(ctx, "DataItems"); err != nil {
-		return err
+		return fmt.Errorf("error to delete items in redis: %w", err)
 	}
 	return nil
 }

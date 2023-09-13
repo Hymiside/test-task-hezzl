@@ -7,10 +7,10 @@ import (
 
 	"github.com/Hymiside/test-task-hezzl/pkg/models"
 
-	_ "github.com/lib/pq"
 	"github.com/golang-migrate/migrate/v4"
-    _ "github.com/golang-migrate/migrate/v4/database/postgres"
-    _ "github.com/golang-migrate/migrate/v4/source/file"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
+	_ "github.com/lib/pq"
 )
 
 func NewPostgresDB(ctx context.Context, c models.ConfigPostgresRepository) (*sql.DB, error) {
