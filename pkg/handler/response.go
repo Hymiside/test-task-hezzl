@@ -2,7 +2,6 @@ package handler
 
 import "github.com/gin-gonic/gin"
 
-
 // responseWithError отдает ответ с ошибкой и JSON
 func responseWithError(c *gin.Context, code int, message interface{}) {
 	c.AbortWithStatusJSON(code, gin.H{

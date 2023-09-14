@@ -31,7 +31,7 @@ func (h *Handler) create(c *gin.Context) {
 		responseWithError(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-	
+
 	responseSuccessful(c, res)
 }
 
@@ -91,7 +91,7 @@ func (h *Handler) list(c *gin.Context) {
 	var limitInt, offsetInt = 10, 0
 	if limit != "" {
 		limitInt, _ = strconv.Atoi(limit)
-	}		
+	}
 	if offset != "" {
 		offsetInt, _ = strconv.Atoi(offset)
 	}
@@ -115,8 +115,8 @@ func (h *Handler) reprioritiize(c *gin.Context) {
 
 	type Reprioritiize struct {
 		NewPriority *int `json:"new_priority"`
-		ProjectId int
-		GoodId int
+		ProjectId   int
+		GoodId      int
 	}
 
 	var data Reprioritiize
@@ -131,7 +131,7 @@ func (h *Handler) reprioritiize(c *gin.Context) {
 
 	data.ProjectId, _ = strconv.Atoi(projectId)
 	data.GoodId, _ = strconv.Atoi(goodId)
-	
+
 	res, err := h.services.Shop.Reprioritiize(c, data.GoodId, data.ProjectId, *data.NewPriority)
 	if err != nil {
 		responseWithError(c, http.StatusInternalServerError, err.Error())

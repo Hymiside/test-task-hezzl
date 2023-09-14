@@ -3,11 +3,11 @@ package postgres
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 	"fmt"
-	"time"
 	"strconv"
 	"strings"
-    "encoding/json"
+	"time"
 
 	"github.com/Hymiside/test-task-hezzl/pkg/models"
 )
@@ -31,8 +31,8 @@ func (s *shopPostgres) Create(data models.Good) (models.Good, error) {
 	defer tx.Rollback()
 
 	var res models.Good
-	if err := tx.QueryRowContext(ctx, "INSERT INTO goods (name, project_id) VALUES ($1, $2) RETURNING id, project_id, name, description, priority, removed, created_at", 
-	data.Name, data.ProjectId).Scan(
+	if err := tx.QueryRowContext(ctx, "INSERT INTO goods (name, project_id) VALUES ($1, $2) RETURNING id, project_id, name, description, priority, removed, created_at",
+		data.Name, data.ProjectId).Scan(
 		&res.Id,
 		&res.ProjectId,
 		&res.Name,
@@ -68,7 +68,7 @@ func (s *shopPostgres) Update(data models.Good) (models.Good, error) {
 		}
 	}
 
-	if err := tx.QueryRowContext(ctx, "UPDATE goods SET name = $1, description = $2 WHERE id = $3 AND project_id = $4",  data.Name, data.Description, data.Id, data.ProjectId); err.Err() != nil {
+	if err := tx.QueryRowContext(ctx, "UPDATE goods SET name = $1, description = $2 WHERE id = $3 AND project_id = $4", data.Name, data.Description, data.Id, data.ProjectId); err.Err() != nil {
 		return models.Good{}, fmt.Errorf("error to update good: %v", err.Err())
 	}
 
@@ -88,8 +88,8 @@ func (s *shopPostgres) Delete(data models.Good) (models.Good, error) {
 	}
 
 	var res models.Good
-	if err := tx.QueryRowContext(ctx, "UPDATE goods SET removed = $1 WHERE id = $2 AND project_id = $3 RETURNING id, project_id, name, description, priority, removed, created_at", 
-	true, data.Id, data.ProjectId).Scan(
+	if err := tx.QueryRowContext(ctx, "UPDATE goods SET removed = $1 WHERE id = $2 AND project_id = $3 RETURNING id, project_id, name, description, priority, removed, created_at",
+		true, data.Id, data.ProjectId).Scan(
 		&res.Id,
 		&res.ProjectId,
 		&res.Name,
@@ -102,11 +102,11 @@ func (s *shopPostgres) Delete(data models.Good) (models.Good, error) {
 		}
 		return models.Good{}, fmt.Errorf("error to delete good: %v", err)
 	}
-	
+
 	if err = tx.Commit(); err != nil {
 		return models.Good{}, fmt.Errorf("error to commit transaction: %v", err)
 	}
-	
+
 	return res, nil
 }
 
@@ -145,11 +145,12 @@ func (s *shopPostgres) WriteLogs(logs [][]byte) error {
 	var (
 		good models.Good
 		data []models.Good
-
 	)
 
 	for _, byteGood := range logs {
-		if err := json.Unmarshal(byteGood, &good); err != nil {fmt.Printf("error to unmarshal byteGood: %v", err)}
+		if err := json.Unmarshal(byteGood, &good); err != nil {
+			fmt.Printf("error to unmarshal byteGood: %v", err)
+		}
 		data = append(data, good)
 	}
 	vals := []interface{}{}
@@ -172,7 +173,7 @@ func (s *shopPostgres) WriteLogs(logs [][]byte) error {
 	if err = tx.Commit(); err != nil {
 		return fmt.Errorf("error to commit transaction: %v", err)
 	}
-	
+
 	return nil
 }
 

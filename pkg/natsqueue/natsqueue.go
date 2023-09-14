@@ -6,7 +6,6 @@ import (
 	"github.com/nats-io/nats.go"
 )
 
-
 type queue interface {
 	Pub(data models.Good) error
 	Sub() error
@@ -16,10 +15,6 @@ type Queue struct {
 	Q queue
 }
 
-func NewNatsQueue(nc *nats.Conn, repoP *postgres.PostgresRepository) *Queue{
+func NewNatsQueue(nc *nats.Conn, repoP *postgres.PostgresRepository) *Queue {
 	return &Queue{Q: newNatsQueue(nc, repoP)}
 }
-
-
-
-

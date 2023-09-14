@@ -14,7 +14,7 @@ import (
 type shopService struct {
 	repoP *postgres.PostgresRepository
 	ch    *redis.RedisRepository
-	nc 	  *natsqueue.Queue
+	nc    *natsqueue.Queue
 }
 
 func newShopService(repoP *postgres.PostgresRepository, ch *redis.RedisRepository, nc *natsqueue.Queue) *shopService {
@@ -69,10 +69,10 @@ func (s *shopService) Delete(ctx context.Context, data models.Good) (interface{}
 		fmt.Printf("error to pub log (update): %v", err)
 	}
 
-	response := map[string]string {
-		"id": strconv.Itoa(res.Id),
+	response := map[string]string{
+		"id":         strconv.Itoa(res.Id),
 		"project_id": strconv.Itoa(res.ProjectId),
-		"removed": strconv.FormatBool(true),
+		"removed":    strconv.FormatBool(true),
 	}
 
 	return response, nil
@@ -168,7 +168,7 @@ func (s *shopService) Reprioritiize(ctx context.Context, id, projectId, newPrior
 		}
 
 		data := map[string]string{
-			"id": strconv.Itoa(good.Id),
+			"id":       strconv.Itoa(good.Id),
 			"priority": strconv.Itoa(good.Priority),
 		}
 		response = append(response, data)

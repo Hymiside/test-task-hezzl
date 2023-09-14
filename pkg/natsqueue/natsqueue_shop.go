@@ -1,8 +1,8 @@
 package natsqueue
 
 import (
+	"encoding/json"
 	"fmt"
-    "encoding/json"
 
 	"github.com/Hymiside/test-task-hezzl/pkg/models"
 	"github.com/Hymiside/test-task-hezzl/pkg/repository/postgres"
@@ -10,8 +10,8 @@ import (
 )
 
 type natsQueue struct {
-	nc *nats.Conn
-	repoP  *postgres.PostgresRepository
+	nc    *nats.Conn
+	repoP *postgres.PostgresRepository
 }
 
 func newNatsQueue(nc *nats.Conn, repoP *postgres.PostgresRepository) *natsQueue {

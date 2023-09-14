@@ -10,11 +10,11 @@ type ConfigServer struct {
 }
 
 type ConfigPostgresRepository struct {
-	Host 	 string
-	Port 	 string
-	User 	 string
+	Host     string
+	Port     string
+	User     string
 	Password string
-	Name 	 string
+	Name     string
 }
 
 type ConfigClickhouseRepository struct {
@@ -29,12 +29,12 @@ type ConfigRedis struct {
 }
 
 type Good struct {
-	Id          int 	  `db:"id"`
+	Id          int       `db:"id"`
 	ProjectId   int       `db:"project_id"`
-	Name 	    string    `json:"name" 		  db:"name"`
+	Name        string    `json:"name" 		  db:"name"`
 	Description string    `json:"description" db:"description"`
-	Priority    int 	  `db:"priority"`
-	Removed     bool 	  `db:"removed"`
+	Priority    int       `db:"priority"`
+	Removed     bool      `db:"removed"`
 	CreatedAt   time.Time `db:"created_at"`
 }
 
