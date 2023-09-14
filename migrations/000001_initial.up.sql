@@ -28,3 +28,5 @@ CREATE TABLE IF NOT EXISTS logs (
 );
 
 INSERT INTO projects (name) VALUES ('Hezzl');
+CREATE INDEX ON goods (project_id);
+CREATE INDEX ON goods (name);

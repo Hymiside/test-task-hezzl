@@ -11,6 +11,7 @@ type shop interface {
 	Update(data models.Good) (models.Good, error)
 	Delete(data models.Good) (models.Good, error)
 	GetAll(limit, offset int) ([]models.Good, error)
+	Reprioritiize(id, projectId, newPriority int) ([]models.Good, error)
 	WriteLogs(logs [][]byte) error
 }
 

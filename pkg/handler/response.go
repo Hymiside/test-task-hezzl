@@ -1,10 +1,7 @@
 package handler
 
-import (
-	"fmt"
+import "github.com/gin-gonic/gin"
 
-	"github.com/gin-gonic/gin"
-)
 
 // responseWithError отдает ответ с ошибкой и JSON
 func responseWithError(c *gin.Context, code int, message interface{}) {
@@ -16,9 +13,6 @@ func responseWithError(c *gin.Context, code int, message interface{}) {
 
 // responseSuccessful отдает 200 ответ с JSON
 func responseSuccessful(c *gin.Context, message interface{}) {
-
-	fmt.Println(message, "123")
-
 	c.AbortWithStatusJSON(200, gin.H{
 		"status":      "success",
 		"description": message,

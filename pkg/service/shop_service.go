@@ -149,3 +149,30 @@ func (s *shopService) updateRedis(ctx context.Context) error {
 	}
 	return nil
 }
+
+func (s *shopService) Reprioritiize(ctx context.Context, id, projectId, newPriority int) (interface{}, error) {
+	res, err := s.repoP.Shop.Reprioritiize(id, projectId, newPriority)
+	if err != nil {
+		return nil, err
+	}
+	err = s.updateRedis(ctx)
+	if err != nil {
+		fmt.Printf("error to update redis: %v", err)
+	}
+
+	var response []map[string]string
+
+	for _, good := range res {
+		if err = s.nc.Q.Pub(good); err != nil {
+			fmt.Printf("error to pub log (update): %v", err)
+		}
+
+		data := map[string]string{
+			"id": strconv.Itoa(good.Id),
+			"priority": strconv.Itoa(good.Priority),
+		}
+		response = append(response, data)
+	}
+	return response, nil
+
+}

@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 
 	"github.com/Hymiside/test-task-hezzl/pkg/models"
@@ -33,8 +34,9 @@ func NewPostgresDB(ctx context.Context, c models.ConfigPostgresRepository) (*sql
 		return nil, err
 	}
 	if err := m.Up(); err != nil {
-		return dbP, nil
-		// return nil, fmt.Errorf("error to make migrations postgres: %w", err)
+		if !errors.Is(err, migrate.ErrNoChange) {
+			return nil, fmt.Errorf("error to make migrations postgres: %w", err)
+		}
 	}
 
 	return dbP, nil

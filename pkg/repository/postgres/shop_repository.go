@@ -187,3 +187,31 @@ func (s *shopPostgres) replaceSQL(stmt, pattern string, len int) string {
 	}
 	return strings.TrimSuffix(stmt, ",")
 }
+
+func (s *shopPostgres) Reprioritiize(id, projectId, newPriority int) ([]models.Good, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	defer cancel()
+
+	rows, err := s.dbP.QueryContext(ctx, "UPDATE goods SET priority = priority + $1 WHERE project_id = $2 and id >= $3 RETURNING id, project_id, name, description, priority, removed, created_at", newPriority, projectId, id)
+	if err != nil {
+		return nil, fmt.Errorf("error to update priority goods: %v", err)
+	}
+	defer rows.Close()
+
+	var goods []models.Good
+	for rows.Next() {
+		var good models.Good
+		if err := rows.Scan(
+			&good.Id,
+			&good.ProjectId,
+			&good.Name,
+			&good.Description,
+			&good.Priority,
+			&good.Removed,
+			&good.CreatedAt); err != nil {
+			return nil, fmt.Errorf("error to scan good after update priority: %v", err)
+		}
+		goods = append(goods, good)
+	}
+	return goods, nil
+}

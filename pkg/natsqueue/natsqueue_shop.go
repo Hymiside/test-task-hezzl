@@ -31,7 +31,7 @@ func (n *natsQueue) Pub(data models.Good) error {
 
 func (n *natsQueue) Sub() error {
 	_, err := n.nc.Subscribe("hezzl", func(msg *nats.Msg) {
-		if len(logs) < 3 {
+		if len(logs) < 24 {
 			logs = append(logs, msg.Data)
 		} else {
 			if err := n.repoP.Shop.WriteLogs(logs); err != nil {

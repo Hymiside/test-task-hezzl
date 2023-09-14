@@ -14,6 +14,7 @@ type service interface {
 	Update(ctx context.Context, data models.Good) (models.Good, error)
 	Delete(ctx context.Context, data models.Good) (interface{}, error)
 	GetAll(ctx context.Context, limit, offset int) (map[string]interface{}, error)
+	Reprioritiize(ctx context.Context, id, projectId, newPriority int) (interface{}, error)
 }
 
 type Service struct {
